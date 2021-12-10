@@ -6,6 +6,9 @@ def compute_total_length(tracklist):
 
 
 def get_first_match_regardless_nb_of_track(tracklist, concert_premiere_length):
+    """
+    Loop over get_matching_combination_of_tracks to get the first match
+    """
     number_of_tracks_to_play = 0
     total_length = 0
 

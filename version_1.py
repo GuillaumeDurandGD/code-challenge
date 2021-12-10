@@ -1,6 +1,17 @@
+"""
+    Version 1 of the solution.
+    Naive function with bad performance
+    Complexity of O(n^3)
+"""
+
+
 def is_triplet_of_compatible_tracks_exists(
     list_of_tracks, concert_premiere_length, tolerance=0
 ):
+    """
+    Check if a triplet of track can matches concert_premiere_length
+    :return: boolean: True if it exists a combination of track that matches the concert_premiere_length, return False otherwise
+    """
     list_of_tracks.sort(key=lambda x: x["length"])
     list_of_durations = [track["length"] for track in list_of_tracks]
 

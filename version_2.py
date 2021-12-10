@@ -1,9 +1,18 @@
+"""
+    Version 2 of the solution.
+    These functions works with a window to target the best starting point then move the multiple indexes of the windows
+    to select a valid list of tracks that matches concert_premiere_length
+"""
+
 import copy
 
 
 def _get_starting_sequence(
     list_of_tracks, concert_premiere_length, number_of_tracks_to_play
 ):
+    """
+    Return the optimal starting point to research the list of track
+    """
     previous_diff = None
 
     for i in range(0, len(list_of_tracks) - (number_of_tracks_to_play - 1)):
@@ -22,6 +31,14 @@ def _get_starting_sequence(
 
 
 def _decrease_first_possible_index(indexes):
+    """
+    Decrease the index of the element on the left of the window
+    If not possible, it will move the next one from the left
+    For example if we have
+    (01[234]5678)
+    the function will do
+    (0[1]2[34]5678)
+    """
     indexes_copy = copy.copy(indexes)
 
     for index, track_index in enumerate(indexes):
@@ -38,6 +55,14 @@ def _decrease_first_possible_index(indexes):
 
 
 def _increase_last_possible_index(tracklist, indexes):
+    """
+    Increase the index of the element on the right of the window
+    If not possible, it will move the next one from the rigth
+    For example if we have
+    (01[234]5678)
+    the function will do
+    (01[23]4[5]678)
+    """
     indexes_copy = sorted(indexes, reverse=True)
     updated_indexes = copy.copy(indexes_copy)
 
@@ -56,6 +81,9 @@ def _increase_last_possible_index(tracklist, indexes):
 
 
 def _search_valid_sequence(tracklist, indexes, concert_premiere_length, tolerance):
+    """
+    Recursively search a sequance that matches the concert_premiere_length by moving the indexes
+    """
     sequence_duration = sum([tracklist[i] for i in indexes])
 
     diff = sequence_duration - concert_premiere_length
@@ -76,6 +104,9 @@ def _search_valid_sequence(tracklist, indexes, concert_premiere_length, toleranc
 def get_matching_combination_of_tracks(
     tracklist, concert_premiere_length, tolerance=0, number_of_tracks_to_play=3
 ):
+    """
+    Return the list of track with a sum of length equal to concert_premiere_length
+    """
     ordered_tracklist = sorted(tracklist, key=lambda x: x["length"])
     tracklist_length = len(ordered_tracklist)
     list_of_durations = [track["length"] for track in ordered_tracklist]
@@ -96,6 +127,9 @@ def get_matching_combination_of_tracks(
 
 
 def is_triplet_of_compatible_tracks_exists_enhanced_version(tracklist, concert_premiere_length, tolerance=0):
+    """
+    Convert the result of get_matching_combination_of_tracks in boolean
+    """
     valid, _ = get_matching_combination_of_tracks(
         tracklist, concert_premiere_length, tolerance, number_of_tracks_to_play=3
     )
