@@ -61,14 +61,14 @@ def _search_valid_sequence(tracklist, indexes, concert_premiere_length, toleranc
     diff = sequence_duration - concert_premiere_length
 
     if (tolerance and abs(diff) <= tolerance) or (not tolerance and diff == 0):
-        return indexes
+        return True, indexes
     if diff < 0:
         new_indexes = _increase_last_possible_index(tracklist, indexes)
     if diff > 0:
         new_indexes = _decrease_first_possible_index(indexes)
 
     if indexes == new_indexes:
-        return []
+        return False, indexes
 
     return _search_valid_sequence(tracklist, new_indexes, concert_premiere_length, tolerance)
 
@@ -88,17 +88,16 @@ def get_matching_combination_of_tracks(
     starting_sequence = _get_starting_sequence(
         list_of_durations, concert_premiere_length, number_of_tracks_to_play
     )
-    valid_sequence = _search_valid_sequence(
+    valid_sequence, sequence = _search_valid_sequence(
         list_of_durations, starting_sequence, concert_premiere_length, tolerance
     )
 
-    if not valid_sequence:
-        return []
-
-    return [ordered_tracklist[i] for i in valid_sequence]
+    return valid_sequence, [ordered_tracklist[i] for i in sequence]
 
 
-def is_triplet_of_compatible_tracks_exists_enhanced_version(all_tracks, concert_premiere_length, tolerance):
-    return bool(get_matching_combination_of_tracks(
-        all_tracks, concert_premiere_length, tolerance, number_of_tracks_to_play=3
-    ))
+def is_triplet_of_compatible_tracks_exists_enhanced_version(tracklist, concert_premiere_length, tolerance=0):
+    valid, _ = get_matching_combination_of_tracks(
+        tracklist, concert_premiere_length, tolerance, number_of_tracks_to_play=3
+    )
+
+    return valid

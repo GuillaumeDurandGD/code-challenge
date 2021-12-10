@@ -3,13 +3,14 @@ import timeit
 
 from version_1 import is_triplet_of_compatible_tracks_exists
 from version_2 import get_matching_combination_of_tracks, is_triplet_of_compatible_tracks_exists_enhanced_version
+from bonus import get_first_match_regardless_nb_of_track
 
 if __name__ == "__main__":
     with open("data/songs.json", "r") as f:
         all_tracks = json.load(f)["all_tracks"]
 
-    concert_premiere_length = 25
-    tolerance = 5
+    concert_premiere_length = 20
+    tolerance = 0
 
     print(
         f"Does it exist a triplet of tracks that matches the concert_premiere_length ({concert_premiere_length} minutes) ?"
@@ -49,3 +50,9 @@ if __name__ == "__main__":
             number=1000,
         )
     )
+
+    print()
+    print("Bonus: generalizing")
+    print("Get the first compatible list of track regardless the number of track")
+    print(get_first_match_regardless_nb_of_track(all_tracks, concert_premiere_length))
+
